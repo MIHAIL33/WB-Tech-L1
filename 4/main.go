@@ -23,8 +23,11 @@ func main() {
 	}
 
 	workChannel := make(chan string, countWorkers) //channel for write and read data
+	defer close(workChannel)
 	exitSignal := make(chan os.Signal, 1) //channel for catching signal
-	exitWorker := make(chan bool, countWorkers) //channel 
+	defer close(exitSignal)
+	exitWorker := make(chan bool, countWorkers) //channel
+	defer close(exitWorker)
 	signal.Notify(exitSignal, syscall.SIGINT, syscall.SIGTERM)
 
 	var wg sync.WaitGroup //wait all goroutines
@@ -54,9 +57,6 @@ func main() {
 				exitWorker <- true //post all goroutines to end
 			}
 			wg.Wait() //wait all goroutines
-			close(workChannel) //close channels
-			close(exitSignal)
-			close(exitWorker)
 			fmt.Println("Finish")
 			return 
 		}

@@ -23,8 +23,12 @@ func main() {
 		panic(err)
 	}
 
-	//int to binary string
-	val := strconv.FormatInt(int64(number), 2) 
+	if i > 64 || i < 1 {
+		panic("i must be between 1 and 64")
+	}
+
+	//get all bits with zeroes
+	val := fmt.Sprintf("%064b", number)
 	fmt.Println(val)
 	bits := strings.Split(val, "")
 

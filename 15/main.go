@@ -23,11 +23,9 @@ var justString string
 
 func someFunc() {
   v := createHugeString(1 << 10)
-  justString = v[:100]
-  fmt.Println(justString)
-
-  v1 := createHugeString_2(1 << 11)
-  justString = string(v1[:100])
+  str := make([]byte, 100)
+  copy(str, v[:100]) //copy 
+  justString = string(str)
   fmt.Println(justString)
 }
 
@@ -39,16 +37,6 @@ func createHugeString(size int) string {
 		str[i] = letterRunes[rand.Intn(len(letterRunes))]
 	}
 	return string(str)
-}
-
-func createHugeString_2(size int) []rune {
-	var letterRunes = []rune("abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ")
-
-	str := make([]rune, size)
-	for i := range str {
-		str[i] = letterRunes[rand.Intn(len(letterRunes))]
-	}
-	return str
 }
 
 func main() {
